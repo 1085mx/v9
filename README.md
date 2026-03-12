@@ -12,6 +12,12 @@ ResidentOS prototype for committee operations, finance, maintenance, visits, and
 
 Use `main` as the stable branch. Do not work directly on `main` for normal feature work.
 
+This repo is set up for shared work between:
+
+- humans
+- Codex
+- Claude
+
 For each task:
 
 1. Start from updated `main`
@@ -42,8 +48,22 @@ Use:
 - `codex/finance-overview`
 - `codex/maintenance-tracker`
 - `codex/reglamento-nav`
+- `claude/finance-overview`
+- `claude/maintenance-tracker`
+- `claude/reglamento-nav`
 
 Keep branch names short and task-specific.
+
+## Shared agent context
+
+These files keep both agents aligned:
+
+- `/Volumes/1085/Work/Sebastian/V9/AGENTS.md`
+- `/Volumes/1085/Work/Sebastian/V9/CLAUDE.md`
+- `/Volumes/1085/Work/Sebastian/V9/docs/handoff.md`
+- `/Volumes/1085/Work/Sebastian/V9/docs/decisions.md`
+
+If work changes hands, update `docs/handoff.md` before stopping.
 
 ## When to use `main`
 
@@ -80,6 +100,12 @@ Create and switch to a new branch:
 
 ```bash
 git checkout -b codex/<short-task-name>
+```
+
+For Claude:
+
+```bash
+git checkout -b claude/<short-task-name>
 ```
 
 Push current branch:
