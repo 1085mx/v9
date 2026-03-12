@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResidentOS — Administracion del edificio</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="site-rail">
+      <div class="site-rail__inner">
+        <div class="site-rail__brand">
+          <a class="logo" href="#" data-view-link="resumen">ResidentOS</a>
+          <p class="site-rail__copy">Panel operativo del edificio</p>
+        </div>
+
+        <nav class="site-nav" aria-label="Secciones">
+          <button class="nav-tab is-active" data-view="resumen" type="button">Centro</button>
+          <button class="nav-tab" data-view="finanzas" type="button">
+            Finanzas <span class="nav-badge" id="nav-badge-finanzas"></span>
+          </button>
+          <button class="nav-tab" data-view="vecinos" type="button">Vecinos</button>
+          <button class="nav-tab" data-view="visitas" type="button">Visitas QR</button>
+          <button class="nav-tab" data-view="reglamento" type="button">Reglamento</button>
+          <button class="nav-tab" data-view="mantenimiento" type="button">
+            Mantenimiento <span class="nav-badge" id="nav-badge-mant"></span>
+          </button>
+          <button class="nav-tab" data-view="proveedores" type="button">Proveedores</button>
+          <button class="nav-tab" data-view="encuestas" type="button">Encuestas</button>
+          <button class="nav-tab" data-view="archivos" type="button">Archivos</button>
+        </nav>
+
+        <div class="site-rail__footer">
+          <span class="topbar-date">Marzo 2026</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="page">
+      <div class="container">
+
+      <!-- ── RESUMEN ─────────────────────────────────────── -->
+      <div class="view" id="view-resumen">
+        <div class="page-header">
+          <div class="section-label">Centro de decisiones</div>
+          <h1 class="section-title">Lo importante para el comité, hoy</h1>
+          <p>Salud financiera, riesgos, cambios desde la última revisión y accesos directos a las decisiones que requieren atención.</p>
+        </div>
+
+        <div class="decision-center-shell">
+          <div class="decision-center-main">
+            <div id="decision-center-story"></div>
+            <div class="stats-grid" id="resumen-cards"></div>
+
+            <div class="decision-center-grid">
+              <div class="panel">
+                <div class="panel-title">Qué cambió desde la última revisión</div>
+                <div id="decision-center-changes"></div>
+              </div>
+
+              <div class="panel">
+                <div class="panel-title">Alertas prioritarias</div>
+                <div id="decision-center-alerts"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="decision-center-side">
+            <div class="panel">
+              <div class="panel-title">Decisiones de hoy</div>
+              <div id="decision-center-actions"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Pulso operativo</div>
+              <div class="finance-grid" id="finanzas-resumen"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Seguimiento rápido</div>
+              <div id="decision-center-ops"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FINANZAS ───────────────────────────────────── -->
+      <div class="view" id="view-finanzas" hidden>
+        <div class="page-header">
+          <div class="section-label">Finanzas</div>
+          <h1 class="section-title">Operacion financiera del comite</h1>
+          <p>Cobranza, egresos, cierre mensual y estados de cuenta por propietario.</p>
+        </div>
+
+        <div class="finance-subnav" aria-label="Subsecciones de finanzas">
+          <button class="finance-tab is-active" data-finance-pane="resumen" type="button">Resumen ejecutivo</button>
+          <button class="finance-tab" data-finance-pane="cobranza" type="button">Cobranza</button>
+          <button class="finance-tab" data-finance-pane="egresos" type="button">Egresos</button>
+          <button class="finance-tab" data-finance-pane="cierre" type="button">Cierre</button>
+          <button class="finance-tab" data-finance-pane="recibos" type="button">Estados</button>
+        </div>
+
+        <div class="finance-pane" id="finance-pane-resumen">
+          <div id="finanzas-story"></div>
+          <div class="stats-grid" id="finanzas-kpis"></div>
+          <div class="finance-grid" id="finanzas-metricas"></div>
+
+          <div class="finance-overview-grid">
+            <div class="panel">
+              <div class="panel-title">Lectura ejecutiva</div>
+              <div id="finanzas-semaforo"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Puente de liquidez</div>
+              <div id="finanzas-puente"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Riesgos prioritarios</div>
+              <div id="finanzas-riesgos"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Bajar al detalle</div>
+              <div id="finanzas-decisiones"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="finance-pane" id="finance-pane-cobranza" hidden>
+          <div class="payments-layout finance-cobranza-layout">
+            <div class="panel">
+              <div class="panel-title">Desglose por espacio</div>
+              <div class="table-wrap">
+                <table class="finance-table">
+                  <thead>
+                    <tr>
+                      <th>Unidad</th>
+                      <th>Propietario</th>
+                      <th>Cuota</th>
+                      <th>Otros</th>
+                      <th>Saldo anterior</th>
+                      <th>Aplicado</th>
+                      <th>Saldo pendiente</th>
+                      <th>Ultimo pago</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cobranza-lista"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="stack">
+              <div class="panel">
+                <div class="panel-title">Bandeja de comprobantes</div>
+                <div class="receipt-list" id="recibos-lista"></div>
+              </div>
+
+              <div class="panel">
+                <div class="panel-title">Detalle y conciliacion</div>
+                <div id="recibo-detalle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="finance-pane" id="finance-pane-egresos" hidden>
+          <div class="finance-expenses-grid">
+            <div class="panel">
+              <div class="panel-title">Gastos fijos</div>
+              <div class="table-wrap">
+                <table class="finance-table">
+                  <thead>
+                    <tr>
+                      <th>Concepto</th>
+                      <th>Proveedor</th>
+                      <th>Presupuesto</th>
+                      <th>Factura</th>
+                      <th>Pendiente anterior</th>
+                      <th>Pagado</th>
+                      <th>Fecha pago</th>
+                      <th>Notas</th>
+                    </tr>
+                  </thead>
+                  <tbody id="gastos-fijos-lista"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Gastos extraordinarios</div>
+              <div class="table-wrap">
+                <table class="finance-table">
+                  <thead>
+                    <tr>
+                      <th>Concepto</th>
+                      <th>Aprobado por</th>
+                      <th>Factura</th>
+                      <th>Pendiente anterior</th>
+                      <th>Pagado</th>
+                      <th>Fecha pago</th>
+                      <th>Notas</th>
+                    </tr>
+                  </thead>
+                  <tbody id="gastos-extra-lista"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="finance-pane" id="finance-pane-cierre" hidden>
+          <div class="finance-grid" id="cierre-cards"></div>
+
+          <div class="files-layout finance-close-layout">
+            <div class="panel">
+              <div class="panel-title">Importacion desde Sheets</div>
+              <div class="import-stack">
+                <label class="field">
+                  <span class="label">Cobranza CSV</span>
+                  <input class="input file-input" id="import-cobranza" type="file" accept=".csv">
+                </label>
+                <label class="field">
+                  <span class="label">Gastos fijos CSV</span>
+                  <input class="input file-input" id="import-gastos-fijos" type="file" accept=".csv">
+                </label>
+                <label class="field">
+                  <span class="label">Gastos extraordinarios CSV</span>
+                  <input class="input file-input" id="import-gastos-extra" type="file" accept=".csv">
+                </label>
+              </div>
+              <div class="import-hint">
+                Columnas sugeridas: `unidad`, `cuota`, `saldo_anterior`, `otros_cargos`, `aplicado` para cobranza; y `descripcion`, `proveedor`, `presupuesto`, `factura`, `pendiente_anterior`, `pagado`, `fecha_pago`, `notas` para egresos.
+              </div>
+              <div class="file-list" id="importaciones-lista"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Snapshot del cierre</div>
+              <div id="cierre-resumen"></div>
+              <div class="panel-title panel-title--spaced">Ingresos extra del mes</div>
+              <div class="file-list" id="ingresos-extra-lista"></div>
+              <button class="btn btn-primary" id="generar-cierre" type="button">Actualizar snapshot mensual</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="finance-pane" id="finance-pane-recibos" hidden>
+          <div class="files-layout finance-docs-layout">
+            <div class="panel">
+              <div class="panel-title">Estado de cuenta por propietario</div>
+              <label class="field">
+                <span class="label">Seleccionar unidad</span>
+                <div class="select-wrap">
+                  <select class="input" id="estado-cuenta-selector"></select>
+                </div>
+              </label>
+              <div id="estado-cuenta-preview"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Acciones de envio</div>
+              <div id="estado-cuenta-email-preview"></div>
+              <div class="action-row">
+                <button class="btn btn-primary" id="abrir-borrador-correo" type="button">Abrir borrador de correo</button>
+                <button class="btn btn-secondary" id="registrar-envio" type="button">Registrar envio</button>
+              </div>
+              <div class="panel-title panel-title--spaced">Historial de envios</div>
+              <div class="file-list" id="historial-envios"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VECINOS ────────────────────────────────────── -->
+      <div class="view" id="view-vecinos" hidden>
+        <div class="page-header">
+          <div class="section-label">Vecinos</div>
+          <h1 class="section-title">Propietarios e inquilinos</h1>
+        </div>
+
+        <div class="panel">
+          <div class="search-bar">
+            <label class="field">
+              <span class="label">Nombre, telefono o departamento</span>
+              <input class="input" id="vecino-busqueda" type="search" placeholder="Ej. Ana, 301, 55 1234 5678">
+            </label>
+          </div>
+          <div class="dir-grid" id="vecinos-lista"></div>
+        </div>
+      </div>
+
+      <!-- ── VISITAS QR ─────────────────────────────────── -->
+      <div class="view" id="view-visitas" hidden>
+        <div class="page-header">
+          <div class="section-label">Visitas</div>
+          <h1 class="section-title">Accesos temporales y QR de visita</h1>
+          <p>Preautorizaciones por departamento, reglas de acceso y pases temporales para invitados, paqueteria y proveedores.</p>
+        </div>
+
+        <div class="stats-grid" id="visitas-kpis"></div>
+
+        <div class="files-layout visits-layout">
+          <div class="panel">
+            <div class="panel-title">QRs activos y programados</div>
+            <div class="visit-list" id="visitas-qr-lista"></div>
+          </div>
+
+          <div class="stack">
+            <div class="panel">
+              <div class="panel-title">Generar nuevo QR</div>
+              <form class="visit-generator-form" id="visita-form">
+                <label class="field">
+                  <span class="label">Departamento / anfitrion</span>
+                  <div class="select-wrap">
+                    <select class="input" id="visita-anfitrion"></select>
+                  </div>
+                </label>
+
+                <div class="visit-generator-grid">
+                  <label class="field">
+                    <span class="label">Visitante</span>
+                    <input class="input" id="visita-visitante" type="text" placeholder="Nombre completo" value="Invitado temporal">
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Tipo</span>
+                    <div class="select-wrap">
+                      <select class="input" id="visita-tipo">
+                        <option value="Visita">Visita</option>
+                        <option value="Proveedor">Proveedor</option>
+                        <option value="Mensajeria">Mensajeria</option>
+                      </select>
+                    </div>
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Fecha</span>
+                    <input class="input" id="visita-fecha" type="date" value="2026-03-11">
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Desde</span>
+                    <input class="input" id="visita-desde" type="time" value="19:00">
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Hasta</span>
+                    <input class="input" id="visita-hasta" type="time" value="22:00">
+                  </label>
+                </div>
+
+                <label class="field">
+                  <span class="label">Motivo</span>
+                  <input class="input" id="visita-motivo" type="text" placeholder="Ej. cena, mantenimiento, entrega" value="Acceso temporal autorizado">
+                </label>
+
+                <div class="visit-generator-actions">
+                  <button class="btn btn-primary" type="submit">Generar QR</button>
+                  <button class="btn btn-secondary" id="visita-copiar-token" type="button">Copiar token</button>
+                </div>
+              </form>
+
+              <div class="visit-preview" id="visita-preview"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Protocolo de acceso</div>
+              <div id="visitas-reglas"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-title">Preferencias por departamento</div>
+              <div id="visitas-preferencias"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── REGLAMENTO ─────────────────────────────────── -->
+      <div class="view" id="view-reglamento" hidden>
+        <div class="page-header">
+          <div class="section-label">Reglamento</div>
+          <h1 class="section-title">Consulta rapida del reglamento</h1>
+          <p>Busqueda por palabras clave y filtros por tema a partir del reglamento vigente de Vigil #9.</p>
+        </div>
+
+        <div class="reglamento-layout">
+          <div class="panel reglamento-sidebar">
+            <div class="panel-title">Indice del reglamento</div>
+            <div class="search-bar">
+              <label class="field">
+                <span class="label">Palabras clave</span>
+                <input class="input" id="reglamento-busqueda" type="search" placeholder="Ej. ruido, visitas, roof, mora, mudanza, casco">
+              </label>
+            </div>
+            <div class="filter-chip-row" id="reglamento-temas"></div>
+
+            <div class="panel-title panel-title--spaced">Navegacion</div>
+            <div id="reglamento-resumen"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">Articulos y reglas clave</div>
+            <div class="reglamento-results" id="reglamento-resultados"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MANTENIMIENTO ──────────────────────────────── -->
+      <div class="view" id="view-mantenimiento" hidden>
+        <div class="page-header">
+          <div class="section-label">Mantenimiento</div>
+          <h1 class="section-title" id="maintenance-page-title">Tareas de marzo</h1>
+          <p>Base operativa del mes con responsables, fechas y seguimiento por estado.</p>
+        </div>
+
+        <div class="maintenance-notion">
+          <div class="maintenance-main">
+            <div class="maintenance-properties" id="maintenance-properties"></div>
+
+            <div class="maintenance-section maintenance-create-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Tracker</div>
+                  <div class="maintenance-section__title">Nueva tarea</div>
+                </div>
+                <div class="maintenance-section__meta">Alta rapida</div>
+              </div>
+
+              <form class="maintenance-form" id="maintenance-form">
+                <div class="maintenance-form__grid">
+                  <label class="field">
+                    <span class="label">Tarea</span>
+                    <input class="input" id="maintenance-title" type="text" placeholder="Ej. Revision de hidroneumatico" required>
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Area</span>
+                    <input class="input" id="maintenance-area" type="text" placeholder="Ej. Torre A, Roof garden" required>
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Fecha</span>
+                    <input class="input" id="maintenance-date" type="date" value="2026-03-11" required>
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Responsable</span>
+                    <input class="input" id="maintenance-owner" type="text" placeholder="Ej. Tec. Rivera" required>
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Estado</span>
+                    <div class="select-wrap">
+                      <select class="input" id="maintenance-status">
+                        <option value="pendiente">Pendiente</option>
+                        <option value="en-curso">En curso</option>
+                        <option value="completada">Completada</option>
+                      </select>
+                    </div>
+                  </label>
+                </div>
+
+                <div class="maintenance-form__actions">
+                  <button class="btn btn-primary" type="submit">Agregar al tracker</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="maintenance-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Base de datos</div>
+                  <div class="maintenance-section__title">Todas las tareas</div>
+                </div>
+                <div class="maintenance-section__meta" id="maintenance-database-meta">Vista maestra del mes</div>
+              </div>
+
+              <div class="maintenance-table-wrap">
+                <table class="maintenance-table">
+                  <thead>
+                    <tr>
+                      <th>Tarea</th>
+                      <th>Area</th>
+                      <th>Fecha</th>
+                      <th>Responsable</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="maintenance-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="maintenance-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Calendario</div>
+                  <div class="maintenance-section__title">Vista mensual</div>
+                </div>
+                <div class="maintenance-month-nav">
+                  <button class="btn btn-secondary maintenance-month-btn" id="maintenance-prev-month" type="button">Anterior</button>
+                  <div class="maintenance-month-label" id="maintenance-month-label">Marzo 2026</div>
+                  <button class="btn btn-secondary maintenance-month-btn" id="maintenance-next-month" type="button">Siguiente</button>
+                </div>
+              </div>
+              <div class="calendar-grid maintenance-calendar" id="calendario"></div>
+            </div>
+          </div>
+
+          <div class="maintenance-side">
+            <div class="maintenance-section maintenance-side-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Supabase</div>
+                  <div class="maintenance-section__title">Conexion de la base</div>
+                </div>
+                <div class="maintenance-section__meta">Tasks tracker</div>
+              </div>
+
+              <div class="maintenance-connection" id="maintenance-supabase-state"></div>
+
+              <form class="maintenance-setup-form" id="maintenance-supabase-form">
+                <div class="maintenance-setup-grid">
+                  <label class="field">
+                    <span class="label">Project URL</span>
+                    <input class="input" id="maintenance-supabase-url" type="url" placeholder="https://tu-proyecto.supabase.co">
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Anon key</span>
+                    <input class="input" id="maintenance-supabase-anon" type="password" placeholder="eyJhbGciOi...">
+                  </label>
+
+                  <label class="field">
+                    <span class="label">Tabla</span>
+                    <input class="input" id="maintenance-supabase-table" type="text" value="tasks" placeholder="tasks">
+                  </label>
+                </div>
+
+                <div class="maintenance-form__actions maintenance-form__actions--split">
+                  <button class="btn btn-secondary" id="maintenance-supabase-disable" type="button">Usar modo local</button>
+                  <div class="maintenance-setup-actions">
+                    <button class="btn btn-secondary" id="maintenance-supabase-reload" type="button">Recargar</button>
+                    <button class="btn btn-primary" type="submit">Guardar y probar</button>
+                  </div>
+                </div>
+              </form>
+
+              <div class="maintenance-setup-hint">
+                La configuracion se guarda en este navegador. La app seguira en modo local si la conexion falla.
+              </div>
+            </div>
+
+            <div class="maintenance-section maintenance-side-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Arrastre de meses anteriores</div>
+                  <div class="maintenance-section__title">Vencidas</div>
+                </div>
+              </div>
+              <div class="task-group">
+                <div id="tareas-vencidas"></div>
+              </div>
+            </div>
+
+            <div class="maintenance-section maintenance-side-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Mes visible</div>
+                  <div class="maintenance-section__title">Pendientes</div>
+                </div>
+              </div>
+              <div class="task-group">
+                <div id="tareas-pendientes"></div>
+              </div>
+            </div>
+
+            <div class="maintenance-section maintenance-side-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Mes visible</div>
+                  <div class="maintenance-section__title">En curso</div>
+                </div>
+              </div>
+              <div class="task-group">
+                <div id="tareas-en-curso"></div>
+              </div>
+            </div>
+
+            <div class="maintenance-section maintenance-side-section">
+              <div class="maintenance-section__head">
+                <div>
+                  <div class="maintenance-section__eyebrow">Mes visible</div>
+                  <div class="maintenance-section__title">Completadas</div>
+                </div>
+              </div>
+              <div class="task-group">
+                <div id="tareas-completadas"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROVEEDORES ────────────────────────────────── -->
+      <div class="view" id="view-proveedores" hidden>
+        <div class="page-header">
+          <div class="section-label">Proveedores</div>
+          <h1 class="section-title">Contactos del edificio</h1>
+        </div>
+
+        <div class="panel">
+          <div class="filters-row">
+            <label class="field">
+              <span class="label">Buscar</span>
+              <input class="input" id="proveedor-busqueda" type="search" placeholder="Servicio o nombre del proveedor">
+            </label>
+            <label class="field">
+              <span class="label">Categoria</span>
+              <div class="select-wrap">
+                <select class="input" id="proveedor-categoria">
+                  <option value="Todas">Todas</option>
+                  <option value="Infraestructura">Infraestructura</option>
+                  <option value="Operacion">Operacion</option>
+                  <option value="Seguridad">Seguridad</option>
+                </select>
+              </div>
+            </label>
+            <label class="field">
+              <span class="label">Prioridad</span>
+              <div class="select-wrap">
+                <select class="input" id="proveedor-prioridad">
+                  <option value="Todas">Todas</option>
+                  <option value="Critica">Critica</option>
+                  <option value="Media">Media</option>
+                </select>
+              </div>
+            </label>
+          </div>
+          <div class="dir-grid" id="proveedores-lista"></div>
+        </div>
+      </div>
+
+      <!-- ── ENCUESTAS ──────────────────────────────────── -->
+      <div class="view" id="view-encuestas" hidden>
+        <div class="page-header">
+          <div class="section-label">Encuestas</div>
+          <h1 class="section-title">Consultas activas</h1>
+        </div>
+        <div class="polls-grid" id="encuestas-lista"></div>
+      </div>
+
+      <!-- ── ARCHIVOS ───────────────────────────────────── -->
+      <div class="view" id="view-archivos" hidden>
+        <div class="page-header">
+          <div class="section-label">Archivos</div>
+          <h1 class="section-title">Biblioteca del edificio</h1>
+        </div>
+
+        <div class="files-layout">
+          <div class="panel">
+            <div class="panel-title">Subir documento</div>
+            <form class="upload-form" id="archivo-form">
+              <label class="field">
+                <span class="label">Categoria</span>
+                <div class="select-wrap">
+                  <select class="input" id="archivo-categoria">
+                    <option value="Finanzas">Finanzas</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                    <option value="Comunidad">Comunidad</option>
+                  </select>
+                </div>
+              </label>
+              <label class="field">
+                <span class="label">Acceso</span>
+                <div class="select-wrap">
+                  <select class="input" id="archivo-acceso">
+                    <option value="Admins">Solo administradores</option>
+                    <option value="Residentes">Todos los residentes</option>
+                  </select>
+                </div>
+              </label>
+              <label class="field">
+                <span class="label">Archivo</span>
+                <input class="input file-input" id="archivo-input" type="file">
+              </label>
+              <button class="btn btn-primary" type="submit">Subir a la biblioteca</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">Documentos disponibles</div>
+            <div class="file-list" id="archivos-lista"></div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="./reglamento-data.js"></script>
+  <script src="./supabase-config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

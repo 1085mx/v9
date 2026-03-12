@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+
+# Common local/runtime files
+node_modules/
+dist/
+build/
+
+# Python local server/cache
+__pycache__/
+
