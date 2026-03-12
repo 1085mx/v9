@@ -14,10 +14,13 @@ Before starting work, read:
 ## Branch policy
 
 - Keep `main` stable
+- Use `dev` as the integration branch
 - Do not work directly on `main` for normal changes
 - Use:
   - `claude/<short-task-name>` for Claude branches
   - `codex/<short-task-name>` for Codex branches
+
+Create task branches from `dev` unless the work is a hotfix.
 
 ## Collaboration rules
 
@@ -25,6 +28,7 @@ Before starting work, read:
 - Write important decisions into repo files
 - If you stop mid-task, update `docs/handoff.md`
 - Keep changes narrow and task-focused
+- Merge normal work into `dev` before it reaches `main`
 
 ## Project context
 

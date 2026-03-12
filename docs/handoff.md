@@ -1,8 +1,9 @@
 # Handoff
 
-## Current stable branch
+## Current branches
 
 - `main`
+- `dev`
 
 ## Last known stable state
 

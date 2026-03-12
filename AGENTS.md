@@ -7,6 +7,7 @@ This repo is shared between human work, Codex, and Claude. The goal is to keep c
 ## Core rules
 
 - Treat `main` as stable.
+- Treat `dev` as the integration branch.
 - Do not use `main` for normal feature work.
 - Use one branch per task.
 - Keep commits focused and easy to review.
@@ -18,6 +19,8 @@ Use:
 
 - `codex/<short-task-name>` for Codex work
 - `claude/<short-task-name>` for Claude work
+
+Base those branches on `dev`, not on `main`, unless the work is a hotfix.
 
 Examples:
 
@@ -54,7 +57,8 @@ When pausing or handing work to another agent:
 
 - Do not bundle unrelated UI, logic, and infra changes in one branch unless they are tightly coupled.
 - If a task expands, split it into a new branch.
-- Prefer small merges back into `main`.
+- Prefer small merges back into `dev`.
+- Promote `dev` into `main` only when the integrated set is stable.
 
 ## Current app shape
 

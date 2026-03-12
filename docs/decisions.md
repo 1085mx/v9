@@ -79,5 +79,8 @@ The repo is shared between human work, Codex, and Claude.
 Rules:
 
 - `main` stays stable
+- `dev` is the integration branch
 - work happens in `codex/*` or `claude/*`
+- normal branches merge into `dev`
+- `dev` promotes into `main`
 - handoffs go into `docs/handoff.md`
